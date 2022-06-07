@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-about',
@@ -7,9 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AboutComponent implements OnInit {
 
-  constructor() { }
-
+  constructor(private http:HttpClient) { }
+  home :any = {}
   ngOnInit(): void {
+    this.http.get('assets/home.json')
+    .subscribe((res:any) => {
+      this.home = res[0]
+      
+    })
   }
 
 }

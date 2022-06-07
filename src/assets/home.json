@@ -1,0 +1,37 @@
+[
+    {
+        "title":"Tanagra Mapping Tool",
+        "contents":[
+            {
+                "content": "Ce développement vise à mettre en place une interface web pour la géolocalisation et la cartographie des noms de lieux dans les textes."
+            },
+            {
+                "content": "À partir d’un corpus de textes, l’application permet d’identifier les noms de lieu à l’aide de l’application SpaCy."
+            },
+            {
+                "content": "Ensuite, les lieux reconnus sont géolocalisés en utilisant une base de données, puis projetés sur une carte interactive."
+            },
+            {
+                "content": "Les nouveaux lieux peuvent également être ajoutés à la base de données."
+            },
+            {
+                "content": "Il est possible pour l’utilisateur de filtrer les résultats par métadonnées (titre ou date), et d’exporter les lieux cartographiés au format csv."
+            }
+        ],
+        "infos" : [
+            {
+                "info" : "Première version: 01/02/2022"
+            },
+            {
+                "info" : "Conception et cahier des charges: Motasem Alrahabi, ObTIC, Sorbonne Université"
+            },
+            {
+                "info" : "Contribution: Angélique Allaire, ObTIC, Sorbonne Université"
+            },
+            {
+                "info" : "Responsable de l’équipe: Glenn Roe, ObTIC, Sorbonne Université"
+            }
+        ]
+       
+    }
+]

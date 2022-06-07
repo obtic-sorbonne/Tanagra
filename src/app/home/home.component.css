@@ -12,6 +12,16 @@
   z-index: 100;
 }
 
+.msg{
+  text-align: center;
+  padding: 10px;
+  margin: 10px 0;
+  color: red;
+  font-weight: 500;
+  /* background: white; */
+  border-radius: 5px;
+}
+
 .results1::-webkit-scrollbar {
   width: 1px;   
 }

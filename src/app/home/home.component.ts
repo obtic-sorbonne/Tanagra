@@ -68,10 +68,12 @@ export class HomeComponent {
 	onAllFiles = false
 	onClickMap = false
 
+
 	confirmedLocation: any = []
 	occurrences: any = []
 	onExceeded = false
 	statusMessage: string
+	msg: string = ""
 
 	constructor(
 		private http: HttpClient,
@@ -80,7 +82,7 @@ export class HomeComponent {
 
 	) { }
 
-	
+
 	ngAfterViewInit(): void {
 		this.createMap()
 	}
@@ -169,6 +171,7 @@ export class HomeComponent {
 
 	// toggle between textarea and upload file
 	onSelectTextArea(e) {
+		this.msg = ''
 		this.textArea = true
 		this.onClickMap = false
 		this.clearText()
@@ -176,6 +179,7 @@ export class HomeComponent {
 
 	// toggle between textarea and upload file
 	onSelectUploadFile(e) {
+		this.msg = ''
 		this.clearText()
 		this.textArea = false
 		this.onAllFiles = false
@@ -184,6 +188,7 @@ export class HomeComponent {
 
 	// Vider le textarea et réinitialiser la carte
 	clearText() {
+		this.msg = ''
 		this.onClickMap = false
 		this.spacyList = []
 		this.listOfText = []
@@ -199,6 +204,7 @@ export class HomeComponent {
 
 	// envoyer le text à SpaCy
 	sendToSpacy(event) {
+		this.msg = ''
 		this.onCenter = false
 		this.onFirsteCenter = true
 		this.onAllFiles = false
@@ -215,7 +221,6 @@ export class HomeComponent {
 			if (this.text) {
 				// envoyer un text vers l'api spacy
 				this.http.get(`${environment.url_py}/text`, { params: { text: this.text, model: this.model } }).subscribe((res: any) => {
-
 					// supprimer les espaces and lowercase location
 					res.map(item => {
 						this.spacyList.push({ city: item.city.trim(), fileName: 'textarea', fileDate: 'no date' })
@@ -245,9 +250,14 @@ export class HomeComponent {
 					}
 
 					// récupérer les coordonnées des lieux reconnus par spacy via l'api geonames
+					if (this.spacyList.length === 0) this.msg = 'No places found'
+					else this.msg = ''
+
 					this.spacyList.forEach(item => {
 						this.geonameSearch(item)
+						
 					})
+
 					this.onClickMap = false
 				})
 			}
@@ -346,6 +356,8 @@ export class HomeComponent {
 				}
 			}
 			// récupérer les coordonnées des lieux reconnus par spacy via l'api geonames
+			if (this.spacyList.length === 0) this.msg = 'No places found'
+			else this.msg = ''
 			this.spacyList.forEach(item => {
 				this.geonameSearch(item)
 			})
@@ -362,7 +374,7 @@ export class HomeComponent {
 		let lat = 0
 		let lng = 0
 
-		arr.map(location => {			
+		arr.map(location => {
 			lat = parseFloat(location.lat)
 			lng = parseFloat(location.lng)
 			// icon size is 16 px  + nbr of occurrences in text
@@ -371,13 +383,13 @@ export class HomeComponent {
 					icon: new L.Icon(
 						{
 							iconUrl: url,
-							iconSize: [size + location.occurence/location.repeated, size + location.occurence/location.repeated],
+							iconSize: [size + location.occurence / location.repeated, size + location.occurence / location.repeated],
 							iconAnchor: [6, 10],
 							popupAnchor: [5, -10],
 						}
 					),
 				}
-			)			
+			)
 
 			this.marker.bindPopup(`
 				Name: ${location.city}<br> 
@@ -408,12 +420,16 @@ export class HomeComponent {
 			}
 		}
 		else {
-			let marker1 = L.marker([lat, lng - 1])
-			let marker2 = L.marker([lat, lng + 1])
-			this.markers.push(marker1)
-			this.markers.push(marker2)
-			this.bounds = L.featureGroup(this.markers);
-			this.map.fitBounds(this.bounds.getBounds(), { padding: [0, 0] });
+			if (this.markers.length === 1) {
+				let marker1 = L.marker([lat, lng - 1])
+				let marker2 = L.marker([lat, lng + 1])
+				this.markers.push(marker1)
+				this.markers.push(marker2)
+				this.bounds = L.featureGroup(this.markers);
+				this.map.fitBounds(this.bounds.getBounds(), { padding: [0, 0] });
+			}
+			else this.map.setView([0, 0], 0)
+
 		}
 	}
 
@@ -486,7 +502,7 @@ export class HomeComponent {
 		this.onFirsteCenter = true
 		this.onCenter = false
 		this.fs.getOccurence(this.confirmedLocation, this.occurrences)
-		this.fs.getDifference(this.confirmedLocation,this.results)
+		this.fs.getDifference(this.confirmedLocation, this.results)
 		this.markers = []
 		if (this.clusters) this.clusters.clearLayers()
 		this.getMarkers(this.confirmedLocation)
@@ -525,6 +541,7 @@ export class HomeComponent {
 
 	// send request to Geonames and get results
 	geonameSearch(item: any = {}) {
+		
 		geonames.search({ q: item.city })
 			.then(response => {
 				if (!response.status) {
@@ -557,6 +574,8 @@ export class HomeComponent {
 					}
 					// sort list by place
 					this.fs.sortListObject(this.results)
+					if (this.results.length === 0) this.msg = 'No places found'
+					else this.msg = ''
 				}
 				else {
 					if (!this.onExceeded) {
@@ -573,7 +592,7 @@ export class HomeComponent {
 	}
 
 
-	
+
 
 }
 
