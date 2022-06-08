@@ -5,10 +5,7 @@
             <span *ngFor="let content of home.contents">{{content.content}}</span>
         </h3>
         <ul>
-            <li *ngFor="let info of home.infos">{{info.info}}</li>
-            <li>
-                Développement: société <a href="https://portfolio-osm.web.app/" target="_blank">OSM</a>
-            </li>
+            <li *ngFor="let info of home.infos" [innerHTML]="info.info"></li>
         </ul>
     </div>
 

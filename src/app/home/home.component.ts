@@ -428,9 +428,13 @@ export class HomeComponent {
 				this.bounds = L.featureGroup(this.markers);
 				this.map.fitBounds(this.bounds.getBounds(), { padding: [0, 0] });
 			}
-			else this.map.setView([0, 0], 0)
+			else this.map.setView([0, 0], 2)
 
 		}
+	}
+
+	setView(){
+		this.map.setView([0, 0], 2)
 	}
 
 	// methode pour filtrer les résultats selon le nom du fichier dans l'occurrence où il y a plusieurs fichiers
