@@ -215,6 +215,7 @@ export class HomeComponent {
 		this.markers = []
 		this.confirmedLocation = []
 		this.results = []
+		this.newResults = []
 		if (this.clusters) this.clusters.clearLayers()
 
 		if (this.textArea) {
@@ -255,7 +256,6 @@ export class HomeComponent {
 
 					this.spacyList.forEach(item => {
 						this.geonameSearch(item)
-						
 					})
 
 					this.onClickMap = false
@@ -505,8 +505,10 @@ export class HomeComponent {
 		// this.dateSelected = ""
 		this.onFirsteCenter = true
 		this.onCenter = false
+		
 		this.fs.getOccurence(this.confirmedLocation, this.occurrences)
 		this.fs.getDifference(this.confirmedLocation, this.results)
+
 		this.markers = []
 		if (this.clusters) this.clusters.clearLayers()
 		this.getMarkers(this.confirmedLocation)
@@ -544,6 +546,7 @@ export class HomeComponent {
 	}
 
 	// send request to Geonames and get results
+	newResults = []
 	geonameSearch(item: any = {}) {
 		
 		geonames.search({ q: item.city })
@@ -578,7 +581,33 @@ export class HomeComponent {
 					}
 					// sort list by place
 					this.fs.sortListObject(this.results)
-					if (this.results.length === 0) this.msg = 'No places found'
+
+					// regrouper par nom  de lieu
+					let groupResults = this.fs.groupBy(this.results, item => item.city)
+					let singleOcc = []
+					// récupérer les lieus dont l'occurrence est égale à 1 et les stocker dans un tableau
+					for (let key of groupResults) {
+						if (key[1].length === 1) {
+							singleOcc.push(key[0])
+						}
+					}
+					
+					// récupérer l'objet tout entier du lieu non répété et les stocker dans un tableau "newResults"
+					singleOcc.forEach(city => {
+						this.results.map(item => {
+							if (item.city === city){
+								this.newResults.push(item)
+							} 
+						})
+					})
+
+					// displaying single place directly
+					if (this.newResults.length > 0) {
+						this.confirmedLocation = this.newResults
+						this.displayOnMap()
+					}
+					
+					if (this.results.length === 0 && this.newResults.length === 0) this.msg = 'No places found'
 					else this.msg = ''
 				}
 				else {

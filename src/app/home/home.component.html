@@ -89,7 +89,7 @@
 		</div>
 		<h3 class="msg" *ngIf="results.length === 0 ">{{msg}}</h3>
 		<div class="d-flex justify-content-between" *ngIf="confirmedLocation.length>0">
-			<button (click)="displayOnMap()" class="primary p-2 rounded">Display on map</button>
+			<button [disabled]="results.length === 0" (click)="displayOnMap()" class="primary p-2 rounded">Display on map</button>
 			<button class="primary p-2 rounded" (click)="exportCSV()">Export to CSV</button>
 			
 		</div>
