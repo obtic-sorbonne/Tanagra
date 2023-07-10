@@ -1,4 +1,12 @@
 # **TANAGRA**
+Ce développement vise à mettre en place une interface web pour la géolocalisation et la cartographie des noms de lieux dans les textes. À partir d’un corpus de textes, l’application permet d’identifier les noms de lieu à l’aide de l’application SpaCy. Ensuite, les lieux reconnus sont géolocalisés en utilisant une base de données, puis projetés sur une carte interactive. Les nouveaux lieux peuvent également être ajoutés à la base de données. Il est possible pour l’utilisateur de filtrer les résultats par métadonnées (titre ou date), et d’exporter les lieux cartographiés au format csv.
+
+
+### Lien: https://obtic.sorbonne-universite.fr/tanagra/map
+
+***
+# Détails:
+
 C'est une application qui se compose de trois couche:
 - Le front: est une interface utitlsateur codée en javascript (Angular 12+)
 - Le back: est une API codée en Python qui sert à traîter le texte envoyé depuis le front et retoune les lieux y repérés grĉe à SpaCy.
